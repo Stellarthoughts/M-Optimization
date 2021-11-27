@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MOptimization.MVVM
+﻿namespace MOptimization.MVVM
 {
+    using MOptimization.MFunction;
+
     public class OptimizationModel
     {
+        private MSFunction function;
+        private double eps;
+            
+        public OptimizationModel()
+        {
+            function = new SphereFunction1(eps);
+        }
     }
 }
