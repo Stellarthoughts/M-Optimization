@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using Prism.Ioc;
-using MOptimization.Views;
+using MSOptimization.Views;
 
-namespace MOptimization
+namespace MSOptimization
 {
     /// <summary>
     /// Interaction logic for App.xaml

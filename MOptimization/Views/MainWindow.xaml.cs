@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MOptimization.Views
+namespace MSOptimization.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -1,10 +1,8 @@
-﻿using MOptimization.Models;
-using Prism.Commands;
-using Prism.Mvvm;
-using System;
-
-namespace MOptimization.ViewModels
+﻿namespace MSOptimization.ViewModels
 {
+    using MSOptimization.Models;
+    using Prism.Commands;
+    using Prism.Mvvm;
     public class MainWindowViewModel : BindableBase
     {
         public DelegateCommand CalculateCommand;
