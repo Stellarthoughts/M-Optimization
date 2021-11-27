@@ -1,13 +1,14 @@
-﻿namespace MOptimization.MVVM
-{
-    using Prism.Commands;
-    using Prism.Mvvm;
-    using System;
+﻿using MOptimization.Models;
+using Prism.Commands;
+using Prism.Mvvm;
+using System;
 
+namespace MOptimization.ViewModels
+{
     public class MainWindowViewModel : BindableBase
     {
         public DelegateCommand CalculateCommand;
-        public OptimizationModel model;
+        public MSOptimizationModel model;
 
         private string _output = "Output";
         private double[] _startPoint = { 0, 0, 0 };
@@ -43,7 +44,7 @@
         public MainWindowViewModel()
         {
             CalculateCommand = new DelegateCommand(Calculate);
-            model = new OptimizationModel();
+            model = new MSOptimizationModel();
         }
 
         public void Calculate()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MOptimization.MFunction
+namespace MOptimization.Core
 {
     // multivar scalar
     public abstract class MSFunction
@@ -43,10 +43,10 @@ namespace MOptimization.MFunction
             double[] res = gradient(args);
             return res;
         }
-        public double[,] Hesse(double[] args)
+        public double[,] Hessian(double[] args)
         {
             checkArgs(args);
-            double[,] res = hesse(args);
+            double[,] res = hessian(args);
             return res;
         }
 
@@ -73,8 +73,11 @@ namespace MOptimization.MFunction
                 {
                     prev = iRes;
 
-                    double[] iterArgsLeft = (double[])args.Clone();
-                    double[] iterArgsRight = (double[])args.Clone();
+                    double[] iterArgsLeft = new double[ArgCount];
+                    double[] iterArgsRight = new double[ArgCount];
+
+                    Array.Copy(args, iterArgsLeft, ArgCount);
+                    Array.Copy(args, iterArgsRight, ArgCount);
 
                     iterArgsLeft[i] -= delta;
                     iterArgsRight[i] += delta;
@@ -96,7 +99,7 @@ namespace MOptimization.MFunction
             return res;
         }
 
-        protected double[,] hesse(double[] args)
+        protected double[,] hessian(double[] args)
         {
             double[,] res = new double[ArgCount,ArgCount];
 
@@ -116,8 +119,11 @@ namespace MOptimization.MFunction
 
                         if(i == j)
                         {
-                            double[] iterArgsLeft = (double[]) args.Clone();
-                            double[] iterArgsRight = (double[]) args.Clone();
+                            double[] iterArgsLeft = new double[ArgCount];
+                            double[] iterArgsRight = new double[ArgCount];
+
+                            Array.Copy(args, iterArgsLeft, ArgCount);
+                            Array.Copy(args, iterArgsRight, ArgCount);
 
                             iterArgsLeft[i] -= delta;
                             iterArgsRight[i] += delta;
@@ -126,10 +132,15 @@ namespace MOptimization.MFunction
                         }
                         else
                         {
-                            double[] Term1 = (double[]) args.Clone();
-                            double[] Term2 = (double[])args.Clone();
-                            double[] Term3 = (double[])args.Clone();
-                            double[] Term4 = (double[])args.Clone();
+                            double[] Term1 = new double[ArgCount];
+                            double[] Term2 = new double[ArgCount];
+                            double[] Term3 = new double[ArgCount];
+                            double[] Term4 = new double[ArgCount];
+
+                            Array.Copy(args, Term1, ArgCount);
+                            Array.Copy(args, Term2, ArgCount);
+                            Array.Copy(args, Term3, ArgCount);
+                            Array.Copy(args, Term4, ArgCount);
 
                             Term1[i] += delta; Term1[j] += delta;
                             Term2[i] += delta; Term2[j] -= delta;
