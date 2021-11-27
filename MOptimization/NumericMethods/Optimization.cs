@@ -38,7 +38,17 @@ namespace MSOptimization.NumericMethods
 
             while(true)
             {
-                //double[] gradient_k = 
+                double[] gradient_k = Differentiation.Gradient(function, approx, eps);
+                if(MatrixOperations.VecEuqNorm(gradient_k) < eps)
+                {
+
+                }
+                else if(k >= maxIter)
+                {
+
+                }
+                double[] s_xl = new double[function.ArgCount];
+
             }
 
             OptimizationResult res = new(new double[1], 0);

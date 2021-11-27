@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MSOptimization.Core
 {
-	public static class MatrixOperations
+    public static class MatrixOperations
 	{
 		public static double[,] Inverse(SLESolvingMethod method, double[,] mat, double eps)
 		{
@@ -87,6 +87,57 @@ namespace MSOptimization.Core
 					str.Append('\n');
 			}
 			return str.ToString();
+		}
+
+		public static double VecEuqNorm(double[] vec)
+        {
+			double res = 0;
+			for(int i = 0; i < vec.Length; i++)
+            {
+				res += Math.Pow(vec[i], 2);
+            }
+			return Math.Sqrt(res);
+        }
+
+		// TODO: ВСЕ ОЧЕНЬ ПЛОХО. Сделать так, чтобы SLE зависел от MatrixOperation, но не наоборот. Универсиализация зависимостей.
+		public static double MatFirstNorm(double[,] mat)
+        {
+			double width = mat.GetLength(0);
+			double height = mat.GetLength(1);
+
+			double normMax = Double.NegativeInfinity;
+			for (int i = 0; i < height; i++)
+			{
+				double normNext = 0;
+				for (int j = 0; j < width; j++)
+				{
+					if (i == j) continue;
+					normNext += Math.Abs(mat[i,j] / mat[i,i]);
+				}
+				if (normNext > normMax) normMax = normNext;
+			}
+
+			return normMax;
+		}
+
+		public static double MatSecondNorm(double [,] mat)
+        {
+			double width = mat.GetLength(0);
+			double height = mat.GetLength(1);
+
+			double normMax = Double.NegativeInfinity;
+			for (int i = 0; i < height; i++)
+			{
+				double normNext = 0;
+				for (int j = 0; j < width; j++)
+				{
+					if (i == j) continue;
+					normNext += Math.Abs(mat[j,i] / mat[j,j]);
+				}
+				if (normNext > normMax) normMax = normNext;
+			}
+
+			return normMax;
 		}
 	}
 }

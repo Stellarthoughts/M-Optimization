@@ -9,8 +9,8 @@
         public MSOptimizationModel model;
 
         private string _output = "Output";
-        private double[] _startPoint = { 0, 0, 0 };
-        private double _step = 1;
+        private double[] _startPoint = { 0, 0, 1};
+        private double _maxIter = 200;
         private double _eps = 0.001;
 
         /*public string Output
@@ -42,7 +42,7 @@
         public MainWindowViewModel()
         {
             CalculateCommand = new DelegateCommand(Calculate);
-            model = new MSOptimizationModel();
+            model = new MSOptimizationModel(_startPoint,_eps,_maxIter);
         }
 
         public void Calculate()

@@ -7,9 +7,9 @@
     {
         private MSFunction _function;
         private IOptimization _method;
-        private double _eps = 0.001;
-        private double[] _init = { 0, 0, 1 };
-        private double _maxIter = 200;
+        private double _eps;
+        private double[] _init;
+        private double _maxIter;
 
         public double Eps
         {
@@ -40,10 +40,14 @@
             set => _method = value; 
         }
 
-        public MSOptimizationModel()
+        public MSOptimizationModel(double[] init, double eps, double maxIter)
         {
+            _init = init;
+            _eps = eps;
+            _maxIter = maxIter;
             _function = new SphereFunction1();
             _method = new OptimizationMarquardt();
+            Optimize();
         }
 
         public OptimizationResult Optimize()
