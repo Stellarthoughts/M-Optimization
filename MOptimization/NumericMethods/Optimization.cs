@@ -1,6 +1,6 @@
 ﻿
 
-namespace MSOptimization.Optimization
+namespace MSOptimization.NumericMethods
 {
     using MSOptimization.Core;
     using System;
@@ -38,7 +38,7 @@ namespace MSOptimization.Optimization
 
             while(true)
             {
-                double[] gradient_k = 
+                //double[] gradient_k = 
             }
 
             OptimizationResult res = new(new double[1], 0);

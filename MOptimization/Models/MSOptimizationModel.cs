@@ -1,8 +1,7 @@
 ﻿namespace MSOptimization.Models
 {
     using MSOptimization.Core;
-    using MSOptimization.Optimization;
-    using System;
+    using MSOptimization.NumericMethods;
 
     public class MSOptimizationModel
     {
