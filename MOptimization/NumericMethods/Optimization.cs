@@ -21,6 +21,8 @@ namespace MSOptimization.NumericMethods
 		public double[] Point => _point;
 
 		public double Value => _value;
+
+		public double Iterations => _iterations;
 	}
 	
 	public interface IOptimization

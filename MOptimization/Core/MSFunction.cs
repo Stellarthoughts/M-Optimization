@@ -71,16 +71,13 @@ namespace MSOptimization.Core
         }
     }
 
-    public class D2Exponential : MSFunction
+    /*public class D2Exponential : MSFunction
     {
         public D2Exponential() : base(2, "(x1 + 10 * x2)^2 + 5(x3 - x4)^2 + (x2 - 2 * x3)^4 + 10(x1 - x4)^4") { }
         protected override double FunctionValue(double[] args)
         {
             throw new NotImplementedException();
         }
-    }
-
-
-
+    }*/
 
 }

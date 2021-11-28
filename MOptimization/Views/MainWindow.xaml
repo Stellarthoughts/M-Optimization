@@ -6,11 +6,24 @@
         mc:Ignorable="d"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="450" Width="600" Background="#FFD6EAE9">
     <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="154,123,0,0" Text="{Binding Eps}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="291,123,0,0" Text="{Binding StartPoint}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="427,123,0,0" Text="{Binding Step}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBlock HorizontalAlignment="Left" Margin="154,158,0,0" Text="{Binding Output}" TextWrapping="Wrap" VerticalAlignment="Top" Height="146" Width="393"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="15"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1">
+            <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,28,0,0" Text="{Binding Eps, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
+            <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,67,0,0" Text="{Binding StartPoint, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
+            <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,106,0,0" Text="{Binding MaxIterations, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
+            <Button Content="Button" Command="{Binding CalculateCommand}" HorizontalAlignment="Center" Margin="0,160,0,0" VerticalAlignment="Top" Height="32" Width="120"/>
+        </Grid>
+        <Grid Grid.Column="3">
+            <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" Text="{Binding Output, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" Height="146" Width="316"/>
+        </Grid>
     </Grid>
 </Window>
