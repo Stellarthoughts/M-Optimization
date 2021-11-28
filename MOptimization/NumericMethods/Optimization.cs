@@ -9,11 +9,13 @@ namespace MSOptimization.NumericMethods
 	{
 		private readonly double[] _point;
 		private readonly double _value;
+		private readonly int _iterations;
 
-		public OptimizationResult(double[] point, double value)
+		public OptimizationResult(double[] point, double value, int iterations)
 		{
 			_point = point;
 			_value = value;
+			_iterations = iterations;
 		}
 
 		public double[] Point => _point;
@@ -31,9 +33,8 @@ namespace MSOptimization.NumericMethods
 		public OptimizationResult Optimize(MSFunction function, double[] init, double eps, double maxIter)
 		{
 			// Step 1
-			double[] temp = new double[function.ArgCount]; 
-			Array.Copy(init, approx, function.ArgCount);
-			double[,] approx = MatrixOperations.VecToMat(temp);
+			double[] x = new double[function.ArgCount]; 
+			Array.Copy(init, x, function.ArgCount);
 
 			// Step 2
 			int k = 0;
@@ -42,8 +43,7 @@ namespace MSOptimization.NumericMethods
 			while (true)
 			{
 				// Step 3
-				double[] gradient_k = Differentiation.Gradient(function, approx, eps);
-
+				double[] gradient_k = Differentiation.Gradient(function, x, eps);
 
 				// Step 4
 				if(MatrixOperations.VecEuqNorm(gradient_k) < eps)
@@ -57,23 +57,45 @@ namespace MSOptimization.NumericMethods
 				}
 				else
 				{
-					// Step 6
-					double[,] tbReversed = MatrixOperations.Add(
-						Differentiation.Hessian(function, approx, eps),
-						MatrixOperations.Multiply(Matrix.IdentityMatrix(function.ArgCount), lambda)
-						);
-					tbReversed = MatrixOperations.Inverse(SLESolver.LUDecomp, tbReversed, eps);
-					tbReversed = MatrixOperations.Multiply(tbReversed, -1);
-					double[,] gradient_k_mForm = MatrixOperations.Transpose(MatrixOperations.VecToMat(gradient_k));
-					double[,] s_xl = MatrixOperations.Multiply(tbReversed, gradient_k_mForm);
+					while (true)
+					{
+						// Step 6
+						double[,] tbReversed = MatrixOperations.Add(
+							Differentiation.Hessian(function, x, eps),
+							MatrixOperations.Multiply(Matrix.IdentityMatrix(function.ArgCount), lambda)
+							);
+						tbReversed = MatrixOperations.Inverse(SLESolver.LUDecomp, tbReversed, eps);
+						tbReversed = MatrixOperations.Multiply(tbReversed, -1);
+						double[,] gradient_k_mForm = MatrixOperations.Transpose(MatrixOperations.VecToMat(gradient_k));
+						double[,] s_xl = MatrixOperations.Multiply(tbReversed, gradient_k_mForm);
 
-					double[,] x1 = MatrixOperations.Add(approx, s_xl);
+						// Step 7
+						double[] x1 = MatrixOperations.MatToVec(
+							MatrixOperations.Add(
+								MatrixOperations.Transpose(MatrixOperations.VecToMat(x)),
+								s_xl)
+							);
 
+						// Step 8
+						if (function.Calculate(x1) < function.Calculate(x))
+						{
+							// Step 9
+							x = x1;
+							lambda /= 2;
+							k++;
+							break;
+						}
+						else
+						{
+							// Step 10
+							lambda *= 2;
+							continue;
+						}
+					}
 				}
-				
 			}
 
-			OptimizationResult res = new(new double[1], 0);
+			OptimizationResult res = new(x, function.Calculate(x), k);
 			return res;
 		}
 	}

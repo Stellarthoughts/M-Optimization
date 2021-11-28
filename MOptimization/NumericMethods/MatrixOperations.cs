@@ -65,12 +65,13 @@ namespace MSOptimization.Core
 
 		public static double[] MatToVec(double[,] mat)
         {
-			int height = mat.GetLength(0);
-			int width = mat.GetLength(1);
-			double[] vec = new double[height > width ? height : width];
-			for(int i = 0; i < (height > width ? height : width); i++)
+			bool hlw = mat.GetLength(0) > mat.GetLength(1);
+			int length = hlw ? mat.GetLength(0) : mat.GetLength(1);
+			if (hlw) mat = Transpose(mat);
+			double[] vec = new double[length];
+			for(int i = 0; i < length; i++)
             {
-				double[ ]
+				vec[i] = mat[0, i];
             }
 			return vec;
         }

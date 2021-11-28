@@ -9,9 +9,9 @@
         public MSOptimizationModel model;
 
         private string _output = "Output";
-        private double[] _startPoint = { 0, 0, 1};
-        private double _maxIter = 200;
-        private double _eps = 0.001;
+        private double[] _startPoint = {-1,1};
+        private double _maxIter = 1000;
+        private double _eps = 0.0001;
 
         /*public string Output
         {

@@ -45,7 +45,7 @@
             _init = init;
             _eps = eps;
             _maxIter = maxIter;
-            _function = new SphereFunction1();
+            _function = new RosenbrockFunction();
             _method = new OptimizationMarquardt();
             Optimize();
         }
