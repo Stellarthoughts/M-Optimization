@@ -40,14 +40,9 @@
             set => _method = value; 
         }
 
-        public MSOptimizationModel(double[] init, double eps, double maxIter)
+        public MSOptimizationModel()
         {
-            _init = init;
-            _eps = eps;
-            _maxIter = maxIter;
-            _function = new RosenbrockFunction();
             _method = new OptimizationMarquardt();
-            Optimize();
         }
 
         public OptimizationResult Optimize()

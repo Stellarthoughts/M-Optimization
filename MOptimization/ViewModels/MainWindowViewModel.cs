@@ -1,7 +1,9 @@
 ﻿namespace MSOptimization.ViewModels
 {
-	using MSOptimization.Models;
-	using Prism.Commands;
+    using MSOptimization.Core;
+    using MSOptimization.Models;
+    using MSOptimization.NumericMethods;
+    using Prism.Commands;
 	using Prism.Mvvm;
 	using System;
 	using System.Globalization;
@@ -36,27 +38,42 @@
 		public string StartPoint
 		{
 			get => string.Join(" ", _startPoint);
-			set => SetProperty(ref _startPoint, Array.ConvertAll(value.Split(" "), Double.Parse));
+			set {
+				try {
+					SetProperty(ref _startPoint, Array.ConvertAll(value.Split(" "), Double.Parse));
+				}
+				catch { return; }
+			}
 		}
 
 		public string MaxIterations
 		{
 			get => _maxIter.ToString();
-			set => SetProperty(ref _maxIter, Int32.Parse(value));
+			set {
+				try {
+					SetProperty(ref _maxIter, Int32.Parse(value));
+				}
+				catch { return; }
+			}
 		}
 
 		public string Eps
 		{
 			get => _eps.ToString(_cultureInfo);
-			set => SetProperty(ref _eps, Double.Parse(value, _cultureInfo));
+			set {
+				try {
+					SetProperty(ref _eps, Double.Parse(value, _cultureInfo));
+				}
+				catch { return;  }
+			}
 		}
 
 		// Controls
-		private readonly DelegateCommand CalculateCommand;
+		public DelegateCommand CalculateCommand { get; private set; }
 
 		public MainWindowViewModel()
 		{
-			_title = "";
+			_title = "Многомерная оптимизация методом Марквардта";
 
 			_output = "Здесь будут выведены результаты работы по оптимизации скалярной функции многих переменных";
 			_startPoint = new double[] {0,0,0};
@@ -64,12 +81,22 @@
 			_eps = 0.001;
 
 			CalculateCommand = new DelegateCommand(Calculate);
-			_model = new MSOptimizationModel(_startPoint,_eps,_maxIter);
+			_model = new MSOptimizationModel();
 		}
+
+		private void UpdateModel()
+        {
+			_model.Eps = _eps;
+			_model.InitValue = _startPoint;
+			_model.MaximumIterations = _maxIter;
+			_model.Function = new RosenbrockFunction();
+        }
 
 		public void Calculate()
 		{
-
+			UpdateModel();
+			OptimizationResult res = _model.Optimize();
+			Output = $"{res.Point}\n{res.Value}\n{res.Iterations}";
 		}
 	}
 }

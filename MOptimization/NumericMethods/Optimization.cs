@@ -1,6 +1,4 @@
-﻿
-
-namespace MSOptimization.NumericMethods
+﻿namespace MSOptimization.NumericMethods
 {
 	using MSOptimization.Core;
 	using System;
