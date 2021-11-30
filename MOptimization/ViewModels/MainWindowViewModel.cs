@@ -3,6 +3,10 @@
     using MSOptimization.Core;
     using MSOptimization.Models;
     using MSOptimization.NumericMethods;
+    using OxyPlot;
+    using OxyPlot.Axes;
+    using OxyPlot.Legends;
+    using OxyPlot.Series;
     using Prism.Commands;
 	using Prism.Mvvm;
 	using System;
@@ -37,6 +41,10 @@
 		private bool _isCheckedRosenbrock;
 		private bool _isCheckedPowell;
 
+		// Model
+		private PlotModel _plotModel;
+
+		// Properties
 		public string Output
 		{
 			get => _output;
@@ -76,6 +84,8 @@
 			}
 		}
 
+		public PlotModel PlotModel { get => _plotModel; set => SetProperty(ref _plotModel, value); }
+
 		// RBs
 		public bool IsCheckedSpherical1
 		{
@@ -108,13 +118,15 @@
 		// Commands
 
 		public DelegateCommand CalculateCommand { get; private set; }
+        
 
-		// Constructor
-		public MainWindowViewModel()
+        // Constructor
+        public MainWindowViewModel()
 		{
 			CalculateCommand = new DelegateCommand(Calculate);
 			IsCheckedSpherical1 = true;
 
+			_plotModel = new PlotModel();
 			_model = new MSOptimizationModel();
 		}
 
@@ -128,10 +140,35 @@
 				$"Значение: {res.Value}\n" +
 				$"Количество итераций: {res.IterationsCount}\n" +
 				$"Точность достигнута: {(res.IsAccuracyAchived ? "Да" : "Нет. Увеличьте количество итераций")}";
+			RenderModel(res);
 		}
 
-		// Private functions
-		private void UpdateModel()
+        private void RenderModel(OptimizationResult res)
+        {
+			_plotModel.Series.Clear();
+			_plotModel.ResetAllAxes();
+
+			int argc = res.Point.Length;
+			for(int i = 0; i < argc; i++)
+            {
+				LineSeries l = new();
+				l.Title = $"x{i}";
+				foreach (var item in res.Iterations) 
+					l.Points.Add(new DataPoint(item.Point[i],item.Value));
+				_plotModel.Series.Add(l);
+            }
+
+			_plotModel.Legends.Add(new Legend
+			{
+				LegendFontSize = 25
+			}
+			);
+			
+			_plotModel.InvalidatePlot(true);
+		}
+
+        // Private functions
+        private void UpdateModel()
         {
 			_model.Function = _function;
 			_model.Eps = _eps;
