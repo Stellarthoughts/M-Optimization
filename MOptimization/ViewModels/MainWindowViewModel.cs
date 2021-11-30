@@ -111,7 +111,7 @@
 		// Private functions
 		private void UpdateModel()
         {
-			_model.Function = _selector.GetChoice();
+			_model.Function = new SphereFunction1();
 			_model.Eps = _eps;
 			_model.MaximumIterations = _maxIter;
 
