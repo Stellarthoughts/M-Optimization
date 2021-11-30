@@ -2,26 +2,67 @@
 {
 	using MSOptimization.Core;
 	using System;
+    using System.Collections.Generic;
+
+    public class Iteration
+    {
+		private readonly double[] _point;
+		private readonly double _value;
+		private readonly double[] _gradient;
+		private readonly double[,] _hessian;
+		private readonly double _lambda;
+		private readonly int _sequenceNumber;
+
+        public Iteration(double[] point, double value, double[] gradient, double[,] hessian, double lambda, int sequenceNumber)
+        {
+            _point = point;
+            _value = value;
+            _gradient = gradient;
+            _hessian = hessian;
+            _lambda = lambda;
+            _sequenceNumber = sequenceNumber;
+        }
+
+		public double[] Point => _point;
+
+        public double Value => _value;
+
+        public double[] Gradient => _gradient;
+
+        public double[,] Hessian => _hessian;
+
+        public double Lambda => _lambda;
+
+        public int SequenceNumber => _sequenceNumber;
+    }
 
 	public class OptimizationResult
 	{
 		private readonly double[] _point;
 		private readonly double _value;
-		private readonly int _iterations;
+		private readonly int _iterationsCount;
+		private readonly bool _isAccuracyAchived;
+		private readonly List<Iteration> _iterations;
 
-		public OptimizationResult(double[] point, double value, int iterations)
-		{
-			_point = point;
-			_value = value;
+        public OptimizationResult(double[] point, double value, int iterationsCount, bool isAccuracyAchived, List<Iteration> iterations)
+        {
+            _point = point;
+            _value = value;
+            _iterationsCount = iterationsCount;
+            _isAccuracyAchived = isAccuracyAchived;
 			_iterations = iterations;
-		}
+        }
 
-		public double[] Point => _point;
+        public double[] Point => _point;
 
-		public double Value => _value;
+        public double Value => _value;
 
-		public double Iterations => _iterations;
-	}
+        public int IterationsCount => _iterationsCount;
+
+        public bool IsAccuracyAchived => _isAccuracyAchived;
+
+		public List<Iteration> Iterations => _iterations;
+    }
 	
 	public interface IOptimization
 	{
@@ -32,6 +73,8 @@
 	{
 		public OptimizationResult Optimize(MSFunction function, double[] init, double eps, double maxIter)
 		{
+			bool _isAccuracyAchived = false;
+			List<Iteration> _iterations = new();
 			// Step 1
 			double[] x = new double[function.ArgCount]; 
 			Array.Copy(init, x, function.ArgCount);
@@ -48,6 +91,7 @@
 				// Step 4
 				if(MatrixOperations.VecEuqNorm(gradient_k) < eps)
 				{
+					_isAccuracyAchived = true;
 					break;
 				}
 				// Step 5
@@ -60,8 +104,9 @@
 					while (true)
 					{
 						// Step 6
+						double[,] hessian = Differentiation.Hessian(function, x, eps);
 						double[,] tbReversed = MatrixOperations.Add(
-							Differentiation.Hessian(function, x, eps),
+							hessian,
 							MatrixOperations.Multiply(Matrix.IdentityMatrix(function.ArgCount), lambda)
 							);
 						tbReversed = MatrixOperations.Inverse(SLESolver.LUDecomp, tbReversed, eps);
@@ -80,6 +125,7 @@
 						if (function.Calculate(x1) < function.Calculate(x))
 						{
 							// Step 9
+							_iterations.Add(new Iteration(x, function.Calculate(x), gradient_k, hessian, lambda, k));
 							x = x1;
 							lambda /= 2;
 							k++;
@@ -95,7 +141,7 @@
 				}
 			}
 
-			OptimizationResult res = new(x, function.Calculate(x), k);
+			OptimizationResult res = new(x, function.Calculate(x), k, _isAccuracyAchived, _iterations);
 			return res;
 		}
 	}

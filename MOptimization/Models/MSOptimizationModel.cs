@@ -51,7 +51,5 @@
             return res;
         }
 
-        public double CalcFunc(double[] args) => _function.Calculate(args);
-
     }
 }

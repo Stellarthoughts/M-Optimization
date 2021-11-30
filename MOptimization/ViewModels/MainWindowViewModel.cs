@@ -6,9 +6,11 @@
     using Prism.Commands;
 	using Prism.Mvvm;
 	using System;
-	using System.Globalization;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Windows.Controls;
 
-	public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase
 	{
 		// Window settings
 		private string _title;
@@ -68,35 +70,69 @@
 			}
 		}
 
-		// Controls
+		// Commands
+
 		public DelegateCommand CalculateCommand { get; private set; }
 
+		// Controls
+		private RBSelector<MSFunction> _selector;
+
+		// Constructor
 		public MainWindowViewModel()
 		{
 			_title = "Многомерная оптимизация методом Марквардта";
+			_selector = new(
+					new List<RadioButton> { },
+					new List<MSFunction> {new SphereFunction1(), new RosenbrockFunction(), new PowellFunction() }
+				);
 
 			_output = "Здесь будут выведены результаты работы по оптимизации скалярной функции многих переменных";
-			_startPoint = new double[] {0,0,0};
+			_startPoint = new double[] {0,0};
 			_maxIter = 200;
 			_eps = 0.001;
 
 			CalculateCommand = new DelegateCommand(Calculate);
+
 			_model = new MSOptimizationModel();
 		}
 
-		private void UpdateModel()
-        {
-			_model.Eps = _eps;
-			_model.InitValue = _startPoint;
-			_model.MaximumIterations = _maxIter;
-			_model.Function = new RosenbrockFunction();
-        }
-
+		// Public functions
 		public void Calculate()
 		{
 			UpdateModel();
 			OptimizationResult res = _model.Optimize();
-			Output = $"{res.Point}\n{res.Value}\n{res.Iterations}";
+			Output = $"Точка: {string.Join(" ", res.Point)}\nЗначение: {res.Value}\nКоличество итераций: {res.IterationsCount}";
+		}
+
+		// Private functions
+		private void UpdateModel()
+        {
+			_model.Function = _selector.GetChoice();
+			_model.Eps = _eps;
+			_model.MaximumIterations = _maxIter;
+
+			ValidateStartPoint();
+			_model.InitValue = _startPoint;
+		}
+
+		private void ValidateStartPoint()
+		{
+			int argc = _model.Function.ArgCount;
+			if (_startPoint.Length != argc)
+			{
+				double[] formattedArg = new double[argc];
+				if (_startPoint.Length > argc)
+				{
+					Array.Copy(_startPoint, formattedArg, argc);
+				}
+				else
+				{
+					Array.Copy(_startPoint, formattedArg, _startPoint.Length);
+					Array.Fill(formattedArg, 0, _startPoint.Length, argc - _startPoint.Length);
+				}
+				_startPoint = formattedArg;
+				RaisePropertyChanged(nameof(StartPoint));
+			}
 		}
 	}
 }
