@@ -81,10 +81,14 @@
 		public MainWindowViewModel()
 		{
 			_title = "Многомерная оптимизация методом Марквардта";
+
+			// С помощью этого я раньше выбирал функцию - в первый лист вводились имена RadioButton
+			// Теперь же надо создать какое-то свойство и связать его с RadioButton, причем всеми.
 			_selector = new(
 					new List<RadioButton> { },
 					new List<MSFunction> {new SphereFunction1(), new RosenbrockFunction(), new PowellFunction() }
 				);
+			
 
 			_output = "Здесь будут выведены результаты работы по оптимизации скалярной функции многих переменных";
 			_startPoint = new double[] {0,0};
