@@ -10,10 +10,10 @@
     using System.Globalization;
     using System.Windows.Controls;
 
-    public class MainWindowViewModel : BindableBase
+	public class MainWindowViewModel : BindableBase
 	{
 		// Window settings
-		private string _title;
+		private string _title = "Многомерная оптимизация методом Марквардта";
 
 		public string Title
 		{
@@ -25,11 +25,17 @@
 		private CultureInfo _cultureInfo = CultureInfo.InvariantCulture;
 
 		// Optimization
-		private string _output;
-		private double[] _startPoint;
-		private int _maxIter;
-		private double _eps;
+		private string _output = "Здесь будут выведены результаты работы по оптимизации скалярной функции многих переменных";
+		private double[] _startPoint = new double[] { 0, 0 };
+		private int _maxIter = 200;
+		private double _eps = 0.001;
 		private MSOptimizationModel _model;
+		private MSFunction _function;
+
+		// Checkbox
+		private bool _isCheckedSpherical1;
+		private bool _isCheckedRosenbrock;
+		private bool _isCheckedPowell;
 
 		public string Output
 		{
@@ -70,32 +76,44 @@
 			}
 		}
 
+		// RBs
+		public bool IsCheckedSpherical1
+		{
+			get => _isCheckedSpherical1;
+			set
+			{
+				if (SetProperty(ref _isCheckedSpherical1, value))
+					if(value) _function = new SphereFunction1();
+			}
+		}
+		public bool IsCheckedRosenbrock
+		{
+			get => _isCheckedRosenbrock;
+			set
+			{
+				if (SetProperty(ref _isCheckedRosenbrock, value))
+					if (value) _function = new RosenbrockFunction();
+			}
+		}
+		public bool IsCheckedPowell
+		{
+			get => _isCheckedPowell;
+			set
+			{
+				if (SetProperty(ref _isCheckedPowell, value))
+					if (value) _function = new PowellFunction();
+			}
+		}
+
 		// Commands
 
 		public DelegateCommand CalculateCommand { get; private set; }
 
-		// Controls
-		private RBSelector<MSFunction> _selector;
-
 		// Constructor
 		public MainWindowViewModel()
 		{
-			_title = "Многомерная оптимизация методом Марквардта";
-
-			// С помощью этого я раньше выбирал функцию - в первый лист вводились имена RadioButton
-			// Теперь же надо создать какое-то свойство и связать его с RadioButton, причем всеми.
-			_selector = new(
-					new List<RadioButton> { },
-					new List<MSFunction> {new SphereFunction1(), new RosenbrockFunction(), new PowellFunction() }
-				);
-			
-
-			_output = "Здесь будут выведены результаты работы по оптимизации скалярной функции многих переменных";
-			_startPoint = new double[] {0,0};
-			_maxIter = 200;
-			_eps = 0.001;
-
 			CalculateCommand = new DelegateCommand(Calculate);
+			IsCheckedSpherical1 = true;
 
 			_model = new MSOptimizationModel();
 		}
@@ -105,13 +123,17 @@
 		{
 			UpdateModel();
 			OptimizationResult res = _model.Optimize();
-			Output = $"Точка: {string.Join(" ", res.Point)}\nЗначение: {res.Value}\nКоличество итераций: {res.IterationsCount}";
+			Output =
+				$"Точка: {string.Join(" ", res.Point)}\n" +
+				$"Значение: {res.Value}\n" +
+				$"Количество итераций: {res.IterationsCount}\n" +
+				$"Точность достигнута: {(res.IsAccuracyAchived ? "Да" : "Нет. Увеличьте количество итераций")}";
 		}
 
 		// Private functions
 		private void UpdateModel()
         {
-			_model.Function = new SphereFunction1();
+			_model.Function = _function;
 			_model.Eps = _eps;
 			_model.MaximumIterations = _maxIter;
 

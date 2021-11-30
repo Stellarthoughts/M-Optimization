@@ -28,9 +28,9 @@
                 <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,67,0,0" Text="{Binding StartPoint, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
                 <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,106,0,0" Text="{Binding MaxIterations, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
                 <Button Content="Button" Command="{Binding CalculateCommand}" HorizontalAlignment="Center" Margin="0,160,0,0" VerticalAlignment="Top" Height="32" Width="120" Background="#FF81D4D0"/>
-                <RadioButton Content="Сферическая функция" Margin="16,207,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" IsChecked="True"/>
-                <RadioButton Content="Функция Розенберга" Margin="16,227,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                <RadioButton Content="Функция Пауэлла" Margin="16,247,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <RadioButton Content="Сферическая функция" IsChecked="{Binding IsCheckedSpherical1}" Margin="16,207,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" />
+                <RadioButton Content="Функция Розенберга" IsChecked="{Binding IsCheckedRosenbrock}" Margin="16,227,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+                <RadioButton Content="Функция Пауэлла" IsChecked="{Binding IsCheckedPowell}" Margin="16,247,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
             </Grid>
             <Grid Name="OutputGrid" Grid.Column="3" Grid.Row="1">
                 <TextBlock HorizontalAlignment="Center" Margin="0,23,0,0" Text="{Binding Output, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" Height="146" Width="316" Background="#FF9ADAEB"/>
