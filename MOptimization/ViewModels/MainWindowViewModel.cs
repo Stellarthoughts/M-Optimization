@@ -4,6 +4,7 @@
     using MSOptimization.Models;
     using MSOptimization.NumericMethods;
     using OxyPlot;
+    using OxyPlot.Annotations;
     using OxyPlot.Axes;
     using OxyPlot.Legends;
     using OxyPlot.Series;
@@ -146,17 +147,52 @@
         private void RenderModel(OptimizationResult res)
         {
 			_plotModel.Series.Clear();
+			_plotModel.Annotations.Clear();
 			_plotModel.ResetAllAxes();
 
 			int argc = res.Point.Length;
-			for(int i = 0; i < argc; i++)
+
+			int annotationStepSuggested = (int)Math.Floor(Math.Sqrt(res.IterationsCount));
+			int step = 1;
+			bool odd = true;
+			
+			for(int i = 0; i < res.IterationsCount; i += step)
             {
+				if (i < annotationStepSuggested || i > res.IterationsCount - annotationStepSuggested)
+					step = 1;
+				else
+					step = annotationStepSuggested;
+
+				LineAnnotation lineAnnotation = new();
+				lineAnnotation.Type = LineAnnotationType.Horizontal;
+				lineAnnotation.Color = OxyColors.DarkGray;
+
+				double val;
+				if (i + step >= res.IterationsCount)
+				{
+					val = res.Value;
+				}
+				else
+					val = res.Iterations[i].Value;
+
+				lineAnnotation.Y = val;
+				lineAnnotation.Text = $"{i+1}";
+				lineAnnotation.TextLinePosition = odd ? 0 : 0.01;
+				odd = !odd;
+				lineAnnotation.TextHorizontalAlignment = HorizontalAlignment.Left;
+
+				_plotModel.Annotations.Add(lineAnnotation);
+			}
+
+			for (int i = 0; i < argc; i++)
+			{
 				LineSeries l = new();
 				l.Title = $"x{i}";
-				foreach (var item in res.Iterations) 
-					l.Points.Add(new DataPoint(item.Point[i],item.Value));
+				foreach (var item in res.Iterations)
+					l.Points.Add(new DataPoint(item.Point[i], item.Value));
 				_plotModel.Series.Add(l);
-            }
+			}
+
 
 			_plotModel.Legends.Add(new Legend
 			{
