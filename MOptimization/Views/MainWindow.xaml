@@ -8,35 +8,63 @@
         xmlns:prism="http://prismlibrary.com/"
 
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="450" Width="600" Background="#FF81ACD4">
+        Title="{Binding Title}" Height="822" Width="896" Background="#FF81ACD4">
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="51.96"/>
             <RowDefinition Height="15"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Grid Name="CalcGrid" Grid.Row="2">
+        <Grid Name="CalcGrid" Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="15"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Grid Name="InputGrid" Grid.Column="1" Grid.RowSpan="2">
-                <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,28,0,0" Text="{Binding Eps, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
-                <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,67,0,0" Text="{Binding StartPoint, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
-                <TextBox Template="{DynamicResource TextBox}" HorizontalAlignment="Center" Margin="0,106,0,0" Text="{Binding MaxIterations, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="24"/>
-                <Button Content="Button" Command="{Binding CalculateCommand}" HorizontalAlignment="Center" Margin="0,160,0,0" VerticalAlignment="Top" Height="32" Width="120" Background="#FF81D4D0"/>
-                <RadioButton Content="Сферическая функция" IsChecked="{Binding IsCheckedSpherical1}" Margin="16,207,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" />
-                <RadioButton Content="Функция Розенброка" IsChecked="{Binding IsCheckedRosenbrock}" Margin="16,227,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
-                <RadioButton Content="Функция Пауэлла" IsChecked="{Binding IsCheckedPowell}" Margin="16,247,16,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"/>
+            <Grid Name="InputGrid" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Rectangle Fill="#FF4FAAFF" Grid.Column="1" RadiusX="10" RadiusY="10" Stroke="#FF396B99" StrokeThickness="5" Margin="0,0,0,0"/>
+                <TextBox Template="{DynamicResource TextBox}" Margin="146,17,10,0" Text="{Binding Eps, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Top" Height="31"/>
+                <TextBox Template="{DynamicResource TextBox}" Margin="146,53,10,0" Text="{Binding StartPoint, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Grid.Column="1"/>
+                <TextBox Template="{DynamicResource TextBox}" Margin="146,88,10,0" Text="{Binding MaxIterations, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" VerticalAlignment="Top" Height="31" Grid.Column="1"/>
+                <Button Content="Рассчитать" Command="{Binding CalculateCommand}" Margin="0,243,0,0" VerticalAlignment="Top" Height="32" Width="120" Background="#FF81D4D0" Grid.Column="1" HorizontalAlignment="Center" FontSize="16"/>
+                <RadioButton Content="Сферическая функция" IsChecked="{Binding IsCheckedSpherical1}" Margin="0,143,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Height="24" Grid.Column="1" FontSize="16" HorizontalAlignment="Center" />
+                <RadioButton Content="Функция Розенброка" IsChecked="{Binding IsCheckedRosenbrock}" Margin="0,172,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Height="25" Grid.Column="1" FontSize="16" HorizontalAlignment="Center" Width="184"/>
+                <RadioButton Content="Функция Пауэлла" IsChecked="{Binding IsCheckedPowell}" Margin="0,202,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Height="24" Grid.Column="1" FontSize="16" HorizontalAlignment="Center" Width="184"/>
+                <Label Content="Точность:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top" FontWeight="Normal" FontSize="14"/>
+                <Label Content="Нач. приближение:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" FontWeight="Normal" FontSize="14"/>
+                <Label Content="Итерации:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" FontWeight="Normal" FontSize="14"/>
             </Grid>
-            <Grid Name="OutputGrid" Grid.Column="3" Grid.Row="1">
-                <TextBlock HorizontalAlignment="Center" Margin="0,23,0,0" Text="{Binding Output, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" Height="146" Width="316" Background="#FF9ADAEB"/>
-                <oxy:PlotView Model="{Binding PlotModel}" Margin="27,190,27,19"/>
+            <Grid Name="OutputGrid" Grid.Column="1" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180*"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="539*"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto">
+                    <TextBlock Text="{Binding Output, Mode=OneWay}" TextWrapping="Wrap" Background="#FF9ADAEB" FontSize="16" Padding="15,15,30,15" Height="Auto" Width="Auto"/>
+                </ScrollViewer>
+                <oxy:PlotView Model="{Binding PlotModel}" Margin="0,20,0,0" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"/>
             </Grid>
+        </Grid>
+        <Grid HorizontalAlignment="Center" Margin="0,0,0,15" Width="424" Grid.Row="1" Height="Auto" Grid.RowSpan="2">
+            <Rectangle HorizontalAlignment="Stretch" Height="52" VerticalAlignment="Stretch" Width="424" Fill="#FF4FAAFF" RadiusX="10" RadiusY="10" Stroke="#FF396B99" StrokeThickness="5">
+            </Rectangle>
+            <Label Content="Метод Макгвардта" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
         </Grid>
     </Grid>
 </Window>

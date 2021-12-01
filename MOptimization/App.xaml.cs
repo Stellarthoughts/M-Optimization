@@ -4,9 +4,6 @@ using MSOptimization.Views;
 
 namespace MSOptimization
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         protected override Window CreateShell()

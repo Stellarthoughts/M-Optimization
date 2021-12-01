@@ -5,17 +5,15 @@
     using MSOptimization.NumericMethods;
     using OxyPlot;
     using OxyPlot.Annotations;
-    using OxyPlot.Axes;
     using OxyPlot.Legends;
     using OxyPlot.Series;
     using Prism.Commands;
 	using Prism.Mvvm;
 	using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Windows.Controls;
+    using System.Text;
 
-	public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase
 	{
 		// Window settings
 		private string _title = "Многомерная оптимизация методом Марквардта";
@@ -136,11 +134,19 @@
 		{
 			UpdateModel();
 			OptimizationResult res = _model.Optimize();
-			Output =
-				$"Точка: {string.Join(" ", res.Point)}\n" +
-				$"Значение: {res.Value}\n" +
-				$"Количество итераций: {res.IterationsCount}\n" +
-				$"Точность достигнута: {(res.IsAccuracyAchived ? "Да" : "Нет. Увеличьте количество итераций")}";
+
+			StringBuilder sb = new();
+			sb.AppendLine($"Функция: {_model.Function.Notation}");
+			sb.AppendLine("Точка:");
+			for (int i = 0; i < res.Point.Length; i++)
+            {
+				sb.AppendLine($"\tx{i} = {res.Point[i]}");
+            }
+			sb.AppendLine($"Значение:\n\ty = {res.Value}");
+			sb.AppendLine($"Количество итераций: {res.IterationsCount}");
+			sb.Append($"Точность достигнута: {(res.IsAccuracyAchived ? "Да" : "Нет. Увеличьте количество итераций")}");
+			Output = sb.ToString();
+
 			RenderModel(res);
 		}
 
