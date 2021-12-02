@@ -64,7 +64,7 @@
         <Grid HorizontalAlignment="Center" Margin="0,0,0,15" Width="424" Grid.Row="1" Height="Auto" Grid.RowSpan="2">
             <Rectangle HorizontalAlignment="Stretch" Height="52" VerticalAlignment="Stretch" Width="424" Fill="#FF4FAAFF" RadiusX="10" RadiusY="10" Stroke="#FF396B99" StrokeThickness="5">
             </Rectangle>
-            <Label Content="Метод Макгвардта" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+            <Label Content="Метод Маркгвардта" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
         </Grid>
     </Grid>
 </Window>

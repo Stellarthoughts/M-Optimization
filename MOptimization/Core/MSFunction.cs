@@ -55,7 +55,7 @@ namespace MSOptimization.Core
 
         protected override double FunctionValue(double[] args)
         {
-            return 100 * Math.Pow((args[1] - Math.Pow(args[0], 2)), 2) + Math.Pow((1 - args[0]),2);
+            return 10 * Math.Pow((args[1] - Math.Pow(args[0], 2)), 2) + Math.Pow((1 - args[0]),2);
         }
     }
 
